@@ -1,0 +1,18 @@
+node {
+
+stage ('Fortify Clean') {
+						fortifyClean addJVMOptions: '', buildID: '1.0', logFile: '', maxHeap: '', verbose: true
+				}
+stage ('Fortify Update') {	
+						fortifyUpdate acceptKey: true, locale: 'en', updateServerURL: 'https://update.fortify.com'
+				}
+stage ('Fortify Translate') {	
+fortifyTranslate addJVMOptions: '', buildID: '1.0', excludeList: '', logFile: '', maxHeap: '', projectScanType: fortifyJava(javaAddOptions: '"-verbose"', javaClasspath: '', javaSrcFiles: '"EightBall.java"', javaVersion: '11'), verbose: true	
+			}
+stage ('Fortify Scan') {	
+						fortifyScan addJVMOptions: '', addOptions: '', buildID: '1.0', customRulepacks: '', logFile: '', maxHeap: '', resultsFile: 'sast_test.fpr', verbose: true	
+			}
+stage ('Fortify Upload') {
+						fortifyUpload appName: 'sast test', appVersion: '1.0', failureCriteria: '', filterSet: '', pollingInterval: '', resultsFile: '', timeout: ''
+			}
+			}
